@@ -9,5 +9,16 @@
 #define MatchMaker_h
 
 #include <stdio.h>
+#include <string>
+#include <vector>
+#include "provided.h"
+class MemberDatabase;
+class AttributeTranslator;
+
+class MatchMaker {
+public:
+    MatchMaker(const MemberDatabase& mdb, const AttributeTranslator& at);
+    std::vector<EmailCount> IdentifyRankedMatches(std::string email, int threshold) const;
+};
 
 #endif /* MatchMaker_h */

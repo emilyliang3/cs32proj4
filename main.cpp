@@ -1,6 +1,6 @@
 //main.cpp
 
-#include "PersonProfile.h"
+/*#include "PersonProfile.h"
 #include "AttributeTranslator.h"
 #include "MemberDatabase.h"
 #include "MatchMaker.h"
@@ -79,4 +79,20 @@ bool findMatches(const MemberDatabase& mdb, const AttributeTranslator& at)
     }
     std::cout << std::endl;
     return true;
+}*/
+
+#include "RadixTree.h"
+#include <string>
+using namespace std;
+
+int main() {
+    RadixTree<string> r;
+    r.insert("hello", "goodbye");
+    r.insert("penis", "gonna kms");
+    r.insert("balls", "fml");
+    r.insert("help", "nor ");
+    r.insert("ballsack", "lol");
+    r.insert("pen", "boop");
+    r.insert("b", "test");
+    r.print();
 }

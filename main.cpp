@@ -88,11 +88,15 @@ using namespace std;
 int main() {
     RadixTree<string> r;
     r.insert("hello", "goodbye");
-    r.insert("penis", "gonna kms");
-    r.insert("balls", "fml");
-    r.insert("help", "nor ");
-    r.insert("ballsack", "lol");
-    r.insert("pen", "boop");
-    r.insert("b", "test");
-    r.print();
+    r.insert("pencil", "yellow");
+    r.insert("balls", "naur");
+    r.insert("help", "nor "); //splitting edge, adding 2 nodes
+    r.insert("ballsyyy", "lol"); //word matches edge but is longer
+    r.insert("pen", "boop"); //word matches edge but is shorter
+    r.insert("b", "test"); //inserting single character that matches beginning of edge
+    r.insert("pennnnn", "extra"); //word matches edge but is longer; but all characters after are same
+    r.insert("pet", "feenicks"); //splitting edge again, adding 2 nodes
+    r.insert("xyz", "abc"); //inserting word does not match any edges
+    r.insert("he", "him"); //splitting edge again
+    r.print(); //prints in order traversal of tree
 }

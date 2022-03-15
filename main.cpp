@@ -83,6 +83,7 @@ bool findMatches(const MemberDatabase& mdb, const AttributeTranslator& at)
 
 #include "RadixTree.h"
 #include <string>
+#include <cassert>
 using namespace std;
 
 int main() {
@@ -98,5 +99,29 @@ int main() {
     r.insert("pet", "feenicks"); //splitting edge again, adding 2 nodes
     r.insert("xyz", "abc"); //inserting word does not match any edges
     r.insert("he", "him"); //splitting edge again
+    r.insert("this is a really long sentence", "1"); //multiple words
+    r.insert("porcupine", "Racoon"); //splitting yet again
+    r.insert("porcelain", "fire"); //splitting again
+    r.insert("Porcupine", "cat"); //case sensitive- two same words, one upper case one lower
+    r.insert("PORCUPINE", "dog"); //case sensitive again
+    r.insert("hello", "au revoir"); //replacing old value
+    r.insert("carey nachenberg", "nerd");
+    r.insert("carey smallberg", "nerd"); //word with one space
+    r.insert("port", "boat"); //splitting yet another time!
+    r.insert("porc", "llll"); //word matches edge perfectly
+    r.insert("porccc", "teehee"); //word matches edge but is longer, in middle of tree
     r.print(); //prints in order traversal of tree
+    
+    string keys[] = {"hello", "pencil", "balls", "help", "ballsyyy", "pen", "b", "pet", "xyz", "porcelain", "port", "porc", "porccc", "carey nachenberg"};
+    r.search("porcelain");
+    for (int i = 0; i < 14; i++)
+        cout << *(r.search(keys[i])) << endl;
+    
+    assert(r.search("pencils") == nullptr);
+    assert(r.search("phoenix") == nullptr);
+    assert(r.search("porcc") == nullptr);
+    string* v = r.search("hello");
+    *v = "modified!";
+    cout << *(r.search("hello")) << endl; //making sure caller is free to modify value in radix tree
+    cout << "all tests succeeded" << endl;
 }

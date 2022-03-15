@@ -45,8 +45,15 @@ private:
         void newEdge(std::string label, const ValueType& value, bool leaf) {
             if (label.length() <= 0)
                 return;
-            int index = label.at(0) - 'a';
-            edges[index] = new Edge(label, value, leaf);
+            int index = (int)label.at(0);
+            edges[index]->label = label;
+            edges[index]->nextNode = new Node(value, leaf);
+        }
+        void newEdge(std::string label) {
+            if (label.length() <= 0)
+                return;
+            int index = (int)label.at(0);
+            edges[index]->label = label;
         }
         bool isEnd; //is the node the end of the word?
         bool isLeaf; //is the node at the bottom of its branch?
@@ -96,7 +103,7 @@ inline void RadixTree<ValueType>::insertNode(std::string key, const ValueType& v
     
     bool inserted = false;
     char curChar = key.at(0);
-    int index = curChar - 'a';
+    int index = (int)curChar;
     Edge* curEdge = n->edges[index];
     std::string edgeLabel = curEdge->label;
     
@@ -106,50 +113,48 @@ inline void RadixTree<ValueType>::insertNode(std::string key, const ValueType& v
         return;
     }
     
-    //base case: duplicate key, update value to new value
+    //base case: key matches edge perfectly, either duplicate or inserting new key
     if (edgeLabel == key) {
         curEdge->nextNode->value = value;
+        curEdge->nextNode->isEnd = true;
         return;
     }
     
-    //inserting at bottom of tree
-    if (curEdge->nextNode->isLeaf) {
-        //case: edge matches beginning of key
-        if (edgeLabel.length() < key.length() && edgeLabel == key.substr(0, edgeLabel.length())) {
-            insertNode(key.substr(edgeLabel.length()), value, curEdge->nextNode);
-            inserted = true;
-        }
-        
-        //case:: key matches beginning of edge
-        if (edgeLabel.length() > key.length() && key == edgeLabel.substr(0, key.length())) {
-            std::string edgeEnd = edgeLabel.substr(key.length());
-            ValueType edgeValue = curEdge->nextNode->value;
-            curEdge->label = key;
-            curEdge->nextNode->value = value;
-            insertNode(edgeEnd, edgeValue, curEdge->nextNode);
-            inserted = true;
-        }
-        
-        //case: edge partially matches beginning of key
-        if (!inserted) {
-            std::string match;
-            int splitIndex = splitEdge(edgeLabel, key, match);
-            std::string edgeEnd = edgeLabel.substr(splitIndex);
-            ValueType edgeValue = curEdge->nextNode->value;
-            curEdge->label = match;
-            curEdge->nextNode->isEnd = false;
-            curEdge->nextNode->newEdge(edgeEnd, edgeValue, true);
-            insertNode(key.substr(splitIndex), value, curEdge->nextNode);
-        }
+    //case: edge matches beginning of key
+    if (edgeLabel.length() < key.length() && edgeLabel == key.substr(0, edgeLabel.length())) {
+        insertNode(key.substr(edgeLabel.length()), value, curEdge->nextNode);
+        inserted = true;
     }
     
-    //inserting at middle of tree
-    else {
-        //case: edge matches beginning of key
-        
+    //case:: key matches beginning of edge
+    if (edgeLabel.length() > key.length() && key == edgeLabel.substr(0, key.length())) {
+        std::string edgeEnd = edgeLabel.substr(key.length());
+        ValueType edgeValue = curEdge->nextNode->value;
+        Node* temp = curEdge->nextNode;
+        n->newEdge(key, value, false);
+        curEdge = n->edges[index];
+        int edgeIndex = (int)edgeEnd.at(0);
+        curEdge->nextNode->edges[edgeIndex]->label = edgeEnd;
+        curEdge->nextNode->edges[edgeIndex]->nextNode = temp; //relinking tree
+        inserted = true;
     }
     
-
+    //case: edge partially matches beginning of key
+    if (!inserted) {
+        std::string match;
+        int splitIndex = splitEdge(edgeLabel, key, match);
+        std::string edgeEnd = edgeLabel.substr(splitIndex);
+        ValueType edgeValue = curEdge->nextNode->value;
+        
+        Node* temp = curEdge->nextNode;
+        n->newEdge(match, edgeValue, false);
+        curEdge = n->edges[index];
+        int edgeIndex = (int)edgeEnd.at(0);
+        curEdge->nextNode->edges[edgeIndex]->label = edgeEnd;
+        curEdge->nextNode->edges[edgeIndex]->nextNode = temp; //relinking tree
+        insertNode(key.substr(splitIndex), value, curEdge->nextNode);
+        curEdge->nextNode->isEnd = false; //splitting edge
+    }
 }
 
 template <typename ValueType>
@@ -174,13 +179,36 @@ inline void RadixTree<ValueType>::printPreorder(Node* node)
     for (int i = 0; i < 128; ++i)
     {
         if (node->edges[i] != nullptr && node->edges[i]->label != "") {
-            //if (node->edges[i]->nextNode->isEnd)
+            if (node->edges[i]->nextNode->isEnd)
                 std::cout << node->edges[i]->label << " : " << node->edges[i]->nextNode->value << std::endl;
-            //else
-           //     std::cout << node->edges[i]->label << std::endl;
+            else
+                std::cout << node->edges[i]->label << std::endl;
             printPreorder(node->edges[i]->nextNode);
         }
     }
+}
+
+template <typename ValueType>
+ValueType* RadixTree<ValueType>::search(std::string key) const
+{
+    Node* curNode = root;
+    std::string s = key;
+    while (curNode != nullptr) {
+        char curChar = s.at(0);
+        int index = (int)curChar;
+        Edge* curEdge = curNode->edges[index];
+        std::string edgeLabel = curEdge->label;
+        if (edgeLabel == s && curEdge->nextNode->isEnd) {
+            return &curEdge->nextNode->value;
+        }
+        if (edgeLabel.length() <= s.length() && edgeLabel == s.substr(0, edgeLabel.length())) {
+            s = s.substr(edgeLabel.length());
+            curNode = curEdge->nextNode;
+        }
+        else
+            return nullptr;
+    }
+    return nullptr;
 }
 
 

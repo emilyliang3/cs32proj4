@@ -180,7 +180,8 @@ inline void RadixTree<ValueType>::printPreorder(Node* node)
     {
         if (node->edges[i] != nullptr && node->edges[i]->label != "") {
             if (node->edges[i]->nextNode->isEnd)
-                std::cout << node->edges[i]->label << " : " << node->edges[i]->nextNode->value << std::endl;
+                //std::cout << node->edges[i]->label  << " : " << node->edges[i]->nextNode->value << std::endl;
+                std::cout << node->edges[i]->label  << std::endl;
             else
                 std::cout << node->edges[i]->label << std::endl;
             printPreorder(node->edges[i]->nextNode);

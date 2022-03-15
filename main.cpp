@@ -84,10 +84,21 @@ bool findMatches(const MemberDatabase& mdb, const AttributeTranslator& at)
 #include "RadixTree.h"
 #include <string>
 #include <cassert>
+#include "AttributeTranslator.h"
 using namespace std;
 
+void listCompatiblePairs(const AttributeTranslator& translator) {
+    AttValPair att("job", "writer");
+    std::vector<AttValPair> results = translator.FindCompatibleAttValPairs(att);
+    if (!results.empty()) {
+        std::cout << "Compatible attributes and values:" << std::endl;
+        for (const auto& p: results)
+            std::cout << p.attribute << " -> " << p.value << std::endl;
+    }
+}
+
 int main() {
-    RadixTree<string> r;
+    /*RadixTree<string> r;
     r.insert("hello", "goodbye");
     r.insert("pencil", "yellow");
     r.insert("balls", "naur");
@@ -123,5 +134,9 @@ int main() {
     string* v = r.search("hello");
     *v = "modified!";
     cout << *(r.search("hello")) << endl; //making sure caller is free to modify value in radix tree
-    cout << "all tests succeeded" << endl;
+    cout << "all tests succeeded" << endl;*/
+    AttributeTranslator a;
+    a.Load("translator.txt");
+    //a.print();
+    listCompatiblePairs(a);
 }

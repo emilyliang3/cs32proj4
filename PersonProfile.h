@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include "provided.h"
 #include <string>
+#include "RadixTree.h"
 
 class PersonProfile {
 public:
@@ -24,9 +25,8 @@ public:
 private:
     std::string m_name;
     std::string m_email;
-    
+    int m_paircount;
+    RadixTree<std::string> m_attValPairs;
 };
-
-PersonProfile
 
 #endif /* PersonProfile_h */

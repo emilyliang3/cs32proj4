@@ -11,13 +11,18 @@
 #include "provided.h"
 #include <vector>
 #include <stdio.h>
+#include "RadixTree.h"
+#include <vector>
 
 class AttributeTranslator {
 public:
-    AttributeTranslator();
-    ~AttributeTranslator();
+    AttributeTranslator() {};
+    ~AttributeTranslator() {};
     bool Load(std::string filename);
     std::vector<AttValPair> FindCompatibleAttValPairs(const AttValPair& source) const;
+    void print();
+private:
+    RadixTree<std::vector<AttValPair>> m_translationData;
 };
 
 #endif /* AttributeTranslator_h */

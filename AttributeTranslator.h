@@ -12,7 +12,6 @@
 #include <vector>
 #include <stdio.h>
 #include "RadixTree.h"
-#include <vector>
 
 class AttributeTranslator {
 public:

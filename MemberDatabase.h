@@ -12,7 +12,8 @@
 #include <string>
 #include <vector>
 #include "provided.h"
-class PersonProfile;
+#include "RadixTree.h"
+#include "PersonProfile.h"
 
 class MemberDatabase {
 public:
@@ -21,6 +22,9 @@ public:
     bool LoadDatabase(std::string filename);
     std::vector<std::string> FindMatchingMembers(const AttValPair& input) const;
     const PersonProfile* GetMemberByEmail(std::string email) const;
+private:
+    RadixTree<std::string> m_emails; //atv pair to email
+    RadixTree<PersonProfile> m_members; //email to personprofile
 };
 
 #endif /* MemberDatabase_h */

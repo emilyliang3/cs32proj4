@@ -36,7 +36,7 @@ private:
         Node(ValueType value, bool leaf) : isEnd(true), isLeaf(leaf) {
             for (int i = 0; i < 128; i++) //128 max unique characters
                 edges[i] = new Edge();
-            m_value = new ValueType;
+            m_value = new ValueType(value);
             *m_value = value;
         }
         ~Node() {

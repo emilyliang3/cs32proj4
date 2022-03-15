@@ -162,7 +162,7 @@ int main() {
     
     MemberDatabase mb;
     mb.LoadDatabase("members.txt");
-    mb.print();
+    //mb.print();
     
     
     

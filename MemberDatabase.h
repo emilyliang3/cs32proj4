@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <set>
 #include "provided.h"
 #include "RadixTree.h"
 #include "PersonProfile.h"
@@ -18,14 +19,15 @@
 class MemberDatabase {
 public:
     MemberDatabase() {};
-    ~MemberDatabase() {};
+    ~MemberDatabase();
     bool LoadDatabase(std::string filename);
     std::vector<std::string> FindMatchingMembers(const AttValPair& input) const;
     const PersonProfile* GetMemberByEmail(std::string email) const;
-    void print() { m_members.print(); }
+    void print() { m_emails.print(); }
 private:
-    RadixTree<std::string> m_emails; //atv pair to email
-    RadixTree<PersonProfile> m_members; //email to personprofile
+    RadixTree<std::set<std::string>> m_emails; //atv pair to emails
+    RadixTree<PersonProfile*> m_members; //email to ptr to personprofile
+    std::vector<std::string> m_emailList; //list of emails to help destructor
 };
 
 #endif /* MemberDatabase_h */

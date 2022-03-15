@@ -85,6 +85,8 @@ bool findMatches(const MemberDatabase& mdb, const AttributeTranslator& at)
 #include <string>
 #include <cassert>
 #include "AttributeTranslator.h"
+#include "PersonProfile.h"
+#include "MemberDatabase.h"
 using namespace std;
 
 void listCompatiblePairs(const AttributeTranslator& translator) {
@@ -98,7 +100,8 @@ void listCompatiblePairs(const AttributeTranslator& translator) {
 }
 
 int main() {
-    /*RadixTree<string> r;
+    /*TESTING RADIX TREE
+     RadixTree<string> r;
     r.insert("hello", "goodbye");
     r.insert("pencil", "yellow");
     r.insert("balls", "naur");
@@ -135,8 +138,32 @@ int main() {
     *v = "modified!";
     cout << *(r.search("hello")) << endl; //making sure caller is free to modify value in radix tree
     cout << "all tests succeeded" << endl;*/
+    
+    /*TESTINIG ATTRIBUTE TRANSLATOR
     AttributeTranslator a;
     a.Load("translator.txt");
     //a.print();
-    listCompatiblePairs(a);
+    listCompatiblePairs(a);*/
+    
+    /*TESTING PERSON PROFILE
+    PersonProfile p("emily", "emily@gmail.com");
+    AttValPair avp1("hobby","piano");
+    AttValPair avp2("favfood","sushi");
+    AttValPair avp3("dog","phoenix");
+    p.AddAttValPair(avp1);
+    p.AddAttValPair(avp2);
+    p.AddAttValPair(avp3);
+    assert(p.GetNumAttValPairs()==3);
+    for (int i = 0; i < 3; i++) {
+        AttValPair avp;
+        p.GetAttVal(i, avp);
+        cout << "att: " << avp.attribute << " val: " << avp.value << endl;
+    }*/
+    
+    MemberDatabase mb;
+    mb.LoadDatabase("members.txt");
+    mb.print();
+    
+    
+    
 }

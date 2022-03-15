@@ -31,10 +31,13 @@ private:
         Node(bool end, bool leaf) : isEnd(end), isLeaf(leaf) {
             for (int i = 0; i < 128; i++) //128 max unique characters
                 edges[i] = new Edge();
+            m_value = nullptr;
         }
-        Node(ValueType value, bool leaf) : isEnd(true), value(value), isLeaf(leaf) {
+        Node(ValueType value, bool leaf) : isEnd(true), isLeaf(leaf) {
             for (int i = 0; i < 128; i++) //128 max unique characters
                 edges[i] = new Edge();
+            m_value = new ValueType;
+            *m_value = value;
         }
         ~Node() {
             for (int i = 0; i < 128; i++) {
@@ -57,7 +60,7 @@ private:
         }
         bool isEnd; //is the node the end of the word?
         bool isLeaf; //is the node at the bottom of its branch?
-        ValueType value; //holds value if node is leaf
+        ValueType* m_value; //holds value if node is leaf
         Edge* edges[128]; //array of pointers to edges
     };
     struct Edge {
@@ -115,7 +118,7 @@ inline void RadixTree<ValueType>::insertNode(std::string key, const ValueType& v
     
     //base case: key matches edge perfectly, either duplicate or inserting new key
     if (edgeLabel == key) {
-        curEdge->nextNode->value = value;
+        *(curEdge->nextNode->m_value) = value;
         curEdge->nextNode->isEnd = true;
         return;
     }
@@ -129,7 +132,7 @@ inline void RadixTree<ValueType>::insertNode(std::string key, const ValueType& v
     //case:: key matches beginning of edge
     if (edgeLabel.length() > key.length() && key == edgeLabel.substr(0, key.length())) {
         std::string edgeEnd = edgeLabel.substr(key.length());
-        ValueType edgeValue = curEdge->nextNode->value;
+        ValueType edgeValue = *(curEdge->nextNode->m_value);
         Node* temp = curEdge->nextNode;
         n->newEdge(key, value, false);
         curEdge = n->edges[index];
@@ -144,7 +147,7 @@ inline void RadixTree<ValueType>::insertNode(std::string key, const ValueType& v
         std::string match;
         int splitIndex = splitEdge(edgeLabel, key, match);
         std::string edgeEnd = edgeLabel.substr(splitIndex);
-        ValueType edgeValue = curEdge->nextNode->value;
+        ValueType edgeValue = *(curEdge->nextNode->m_value);
         
         Node* temp = curEdge->nextNode;
         n->newEdge(match, edgeValue, false);
@@ -200,7 +203,7 @@ ValueType* RadixTree<ValueType>::search(std::string key) const
         Edge* curEdge = curNode->edges[index];
         std::string edgeLabel = curEdge->label;
         if (edgeLabel == s && curEdge->nextNode->isEnd) {
-            return &curEdge->nextNode->value;
+            return curEdge->nextNode->m_value;
         }
         if (edgeLabel.length() <= s.length() && edgeLabel == s.substr(0, edgeLabel.length())) {
             s = s.substr(edgeLabel.length());

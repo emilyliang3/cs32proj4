@@ -17,11 +17,12 @@
 
 class MemberDatabase {
 public:
-    MemberDatabase();
-    ~MemberDatabase();
+    MemberDatabase() {};
+    ~MemberDatabase() {};
     bool LoadDatabase(std::string filename);
     std::vector<std::string> FindMatchingMembers(const AttValPair& input) const;
     const PersonProfile* GetMemberByEmail(std::string email) const;
+    void print() { m_members.print(); }
 private:
     RadixTree<std::string> m_emails; //atv pair to email
     RadixTree<PersonProfile> m_members; //email to personprofile

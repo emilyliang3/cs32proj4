@@ -25,9 +25,9 @@ public:
     const PersonProfile* GetMemberByEmail(std::string email) const;
     void print() { m_emails.print(); }
 private:
+    std::vector<PersonProfile*> m_profileptrs;
     RadixTree<std::set<std::string>> m_emails; //atv pair to emails
-    RadixTree<PersonProfile*> m_members; //email to ptr to personprofile
-    std::vector<std::string> m_emailList; //list of emails to help destructor
+    RadixTree<PersonProfile*> m_members; //email to personprofile
 };
 
 #endif /* MemberDatabase_h */

@@ -100,8 +100,8 @@ void listCompatiblePairs(const AttributeTranslator& translator) {
 }
 
 int main() {
-    /*TESTING RADIX TREE
-     RadixTree<string> r;
+    //TESTING RADIX TREE
+    /*RadixTree<string> r;
     r.insert("hello", "goodbye");
     r.insert("pencil", "yellow");
     r.insert("balls", "naur");
@@ -139,14 +139,14 @@ int main() {
     cout << *(r.search("hello")) << endl; //making sure caller is free to modify value in radix tree
     cout << "all tests succeeded" << endl;*/
     
-    /*TESTINIG ATTRIBUTE TRANSLATOR
+    /*//TESTING ATTRIBUTE TRANSLATOR
     AttributeTranslator a;
     a.Load("translator.txt");
     //a.print();
     listCompatiblePairs(a);*/
     
-    /*TESTING PERSON PROFILE
-    PersonProfile p("emily", "emily@gmail.com");
+    //TESTING PERSON PROFILE
+    /*PersonProfile p("emily", "emily@gmail.com");
     AttValPair avp1("hobby","piano");
     AttValPair avp2("favfood","sushi");
     AttValPair avp3("dog","phoenix");
@@ -160,10 +160,8 @@ int main() {
         cout << "att: " << avp.attribute << " val: " << avp.value << endl;
     }*/
     
+    //TESTING MEMBER DATABASE
     MemberDatabase mb;
     mb.LoadDatabase("members.txt");
     //mb.print();
-    
-    
-    
 }
